@@ -1,8 +1,9 @@
-import { describe, test, expect } from 'vitest'
+import nock from 'nock'
+import { describe, expect } from 'vitest'
 import { fetch_people_in } from './fetch'
 
 describe('fetch_people_in', () => {
-  test('call fetch_people_in with 1990', async () => {
+  it('call fetch_people_in with 1990', async () => {
     const year = 1990
     // scraped from https://en.wikipedia.org/wiki/AD_100
     const mockData = `
