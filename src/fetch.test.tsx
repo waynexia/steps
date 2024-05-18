@@ -1,10 +1,8 @@
-import nock from 'nock'
 import { describe, expect, it } from 'vitest'
-import { fetch_people_in } from './fetch'
+import { extract_people_from_html } from './fetch'
 
-describe('fetch_people_in', () => {
-  it('call fetch_people_in with 1990', async () => {
-    const year = 1990
+describe('extract_people_from_html', () => {
+  it('call extract_people_from_html with 100', async () => {
     // scraped from https://en.wikipedia.org/wiki/AD_100
     const mockData = `
 <div>
@@ -29,16 +27,7 @@ describe('fetch_people_in', () => {
     <li><a href="/wiki/Wang_Chong" title="Wang Chong">Wang Chong</a>, Chinese philosopher (b. <a href="/wiki/AD_27" title="AD 27">AD 27</a>)</li></ul>
 </div>
 `
-
-    nock('https://en.wikipedia.org')
-      .defaultReplyHeaders({
-        'access-control-allow-origin': '*',
-        'access-control-allow-credentials': 'true',
-      })
-      .get(`/wiki/AD_${year}`)
-      .reply(200, mockData)
-
-    const result = await fetch_people_in(year)
+    const result = extract_people_from_html(mockData)
 
     expect(result).toEqual(
       [{

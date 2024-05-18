@@ -27,7 +27,7 @@ export async function build_list(start_year: number, end_year: number) {
       other_people: people_born,
     })
 
-    year = random_person.death!
+    year = random_person.death! + 500
   }
 
   return list

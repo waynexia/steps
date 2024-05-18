@@ -2,9 +2,6 @@ import { useEffect, useState } from 'react'
 import { build_list } from './list'
 
 function App() {
-  // const [list, setList] = useState([])
-  // build_list(100, 2000).then(setList)
-
   const [list, setList] = useState<{ from: number, to: number, person: { desc: string, link: string | undefined, death: number | undefined }, other_people: { desc: string, link: string | undefined, death: number | undefined }[] }[]>([])
 
   useEffect(() => {

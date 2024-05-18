@@ -1,21 +1,22 @@
-import axios from 'axios'
 import * as cheerio from 'cheerio'
-
-const WIKIPEDIA_AD_URL = 'https://en.wikipedia.org/wiki/AD_'
-// const WIKIPEDIA_AD_URL = 'https://cors-anywhere.herokuapp.com/https://en.wikipedia.org/wiki/AD_'
+import wiki from 'wikipedia'
 
 export async function fetch_people_in(year: number) {
-  return axios.get(WIKIPEDIA_AD_URL + year).then((response) => {
-    const $ = cheerio.load(response.data)
-    const birthsHeader = $('#Births').parent()
-    const births = birthsHeader.nextUntil('h2').find('li').map((_, el) => {
-      const desc = $(el).text()
-      const link = $(el).find('a').attr('href')
-      const deathMatch = desc.match(/\(d\. \d+/i)?.[0]
-      const death = deathMatch ? Number.parseInt(deathMatch.substring(3)) : undefined
-      return { desc, link, death }
-    },
-    ).get()
-    return births
-  })
+  const page = await wiki.page(`AD_${year}`)
+  const html = await page.html({ redirect: true })
+  return extract_people_from_html(html)
+}
+
+export function extract_people_from_html(html: string) {
+  const $ = cheerio.load(html)
+  const birthsHeader = $('#Births').parent()
+  const births = birthsHeader.nextUntil('h2').find('li').map((_, el) => {
+    const desc = $(el).text()
+    const link = $(el).find('a').attr('href')
+    const deathMatch = desc.match(/\(d\. \d+/i)?.[0]
+    const death = deathMatch ? Number.parseInt(deathMatch.substring(3)) : undefined
+    return { desc, link, death }
+  }).get()
+
+  return births
 }
