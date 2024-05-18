@@ -1,8 +1,8 @@
 import axios from 'axios'
 import * as cheerio from 'cheerio'
 
-// const WIKIPEDIA_BASE_URL = 'https://en.wikipedia.org'
-const WIKIPEDIA_AD_URL = 'https://cors-anywhere.herokuapp.com/https://en.wikipedia.org/wiki/AD_'
+const WIKIPEDIA_AD_URL = 'https://en.wikipedia.org/wiki/AD_'
+// const WIKIPEDIA_AD_URL = 'https://cors-anywhere.herokuapp.com/https://en.wikipedia.org/wiki/AD_'
 
 export async function fetch_people_in(year: number) {
   return axios.get(WIKIPEDIA_AD_URL + year).then((response) => {
