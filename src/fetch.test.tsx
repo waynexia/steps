@@ -1,4 +1,5 @@
 import nock from 'nock'
+import { describe, expect, it } from 'vitest'
 import { fetch_people_in } from './fetch'
 
 describe('fetch_people_in', () => {
@@ -30,6 +31,10 @@ describe('fetch_people_in', () => {
 `
 
     nock('https://en.wikipedia.org')
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true',
+      })
       .get(`/wiki/AD_${year}`)
       .reply(200, mockData)
 
