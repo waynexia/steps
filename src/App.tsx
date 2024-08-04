@@ -5,7 +5,7 @@ import { wikipedia_link_of_page, wikipedia_link_of_year } from './utils'
 function App() {
   const [list, setList] = useState<{ from: number, to: number, person: { desc: string, link: string | undefined, death: number | undefined }, other_people: { desc: string, link: string | undefined, death: number | undefined }[] }[]>([])
 
-  // const [currentIndex, setCurrentIndex] = useState(0)
+  const [currentIndex, setCurrentIndex] = useState(0)
   const [currentTimelineHighlight, setCurrentTimelineHighlight] = useState(0)
 
   // prepare (mock) data
@@ -19,25 +19,31 @@ function App() {
     fetchData()
   }, [])
 
-  const handleScrollDebug: React.UIEventHandler<HTMLDivElement> = (e) => {
+  const handleScroll: React.UIEventHandler<HTMLDivElement> = (e) => {
     const { scrollTop, scrollHeight, clientHeight } = e.target as HTMLDivElement
     const position = Math.ceil(
       (scrollTop / (scrollHeight - clientHeight)) * 1000,
     )
     setCurrentTimelineHighlight(position)
+
+    if (position > list[currentIndex].to && currentIndex < list.length - 1)
+      setCurrentIndex(currentIndex + 1)
+    else if (position < list[currentIndex].from && currentIndex > 0)
+      setCurrentIndex(currentIndex - 1)
   }
 
   return (
     <div className="gallery">
-      <div className="progress-bar" onScroll={handleScrollDebug}>
-        vertical timeline
+      <div className="timeline" onScroll={handleScroll}>
+        Timeline
         <table>
           <tbody>
             {Array.from({ length: 1000 }).map((_, index) => (
-              <tr key={index}>
+              <tr key={index} className={currentTimelineHighlight === index ? 'highlight' : ''}>
                 <td>
-                  Row
-                  {index === currentTimelineHighlight ? 99999 : index}
+                  Year
+                  {' '}
+                  {index }
                 </td>
               </tr>
             ))}
@@ -46,7 +52,7 @@ function App() {
       </div>
 
       <div className="text-detail">
-        {/* <h1>{list[currentIndex].person.desc}</h1> */}
+        <h1>{ list.length === 0 ? 'loading...' : list[currentIndex].person.desc}</h1>
         <p>description</p>
       </div>
 
