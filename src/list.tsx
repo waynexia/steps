@@ -1,6 +1,6 @@
 import { fetch_people_in, person_detail } from './fetch'
 
-export async function build_list(start_year: number, end_year: number) {
+export async function build_list(start_year: number, end_year: number, update_state) {
   const list = []
   let year = start_year
   const born_of_last_person = start_year
@@ -30,6 +30,9 @@ export async function build_list(start_year: number, end_year: number) {
       person_detail: detail,
       other_people: people_born,
     })
+
+    update_state(list)
+    await new Promise(resolve => setTimeout(resolve, 10000))
 
     year = random_person.death!
   }

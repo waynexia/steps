@@ -44,6 +44,16 @@ td {
     flex-direction: column;
 }
 
+.intro h1 {
+    text-align: center;
+    margin: 5px;
+}
+
+.intro h2 {
+    text-align: center;
+    margin: 5px;
+}
+
 .text-detail-container {
     flex: 10;
     border-radius: 20px;
@@ -53,8 +63,13 @@ td {
     background-color: #f0f0f0;
 
     white-space: pre-wrap;
-    line-height: 1.5;
+    line-height: 1.6;
+    font-size: 16px;
     font-family: Arial, sans-serif;
+}
+
+.preview-next {
+    color: gray;
 }
 
 .photo {
@@ -64,19 +79,37 @@ td {
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 20px;
-    font-size: 12px;
+    padding: 0 20px;
 
     overflow: hidden;
 }
 
+.subtitle {
+    font-size: 12px;
+}
+
+.people-counter {
+    margin: 1rem 0;
+    font-size: 16px;
+}
+
+.other-people {
+    flex: 1;
+    font-size: 14px;
+    overflow-y: scroll;
+    max-height: 15vh;
+    text-align: left;
+}
+
 .photo img {
     max-width: 100%;
-    max-height: 100%;
+    max-height: 60vh;
     object-fit: contain;
 
     background-color: #fff;
     border: 8px solid #333;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+
+    flex: 5
 }
