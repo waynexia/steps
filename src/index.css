@@ -1,0 +1,37 @@
+.container {
+    height: 100svh;
+    width: 100svw;
+    display: grid;
+    grid-template-columns: 15% 40% 45%;
+    grid-template-rows: 10% 80% 10%;
+    grid-template-areas:
+        "scroll-side header header"
+        "scroll-side main aside"
+        "scroll-side footer footer";
+}
+
+.scroll-side {
+    grid-area: scroll-side;
+    background-color: #f0f0f0;
+    /* overflow-y: auto; */
+}
+
+.header {
+    grid-area: header;
+    background-color: #f0f0f0;
+}
+
+.main {
+    grid-area: main;
+    background-color: #f0f0f0;
+}
+
+.aside {
+    grid-area: aside;
+    background-color: #f0f0f0;
+}
+
+.footer {
+    grid-area: footer;
+    background-color: #f0f0f0;
+}
