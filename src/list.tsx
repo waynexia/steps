@@ -1,4 +1,4 @@
-import { fetch_people_in } from './fetch'
+import { fetch_people_in, person_detail } from './fetch'
 
 export async function build_list(start_year: number, end_year: number) {
   const list = []
@@ -20,10 +20,14 @@ export async function build_list(start_year: number, end_year: number) {
     // fetch random person from people_next
     const random_person = people_next[Math.floor(Math.random() * people_next.length)]
 
+    // fill details of this person
+    const detail = await person_detail(random_person.link!)
+
     list.push({
       from: year,
       to: random_person.death!,
       person: random_person,
+      person_detail: detail,
       other_people: people_born,
     })
 
@@ -44,6 +48,12 @@ export async function mock_list(start_year: number, end_year: number) {
         desc: 'Ptolemy, Greek astrologer, astronomer, geographer and mathematician (d. 170)',
         link: '/wiki/Ptolemy',
         death: 170,
+      },
+      person_detail: {
+        title: 'Ptolemy',
+        intro: 'Claudius Ptolemy (/ˈtɒləmi/; Greek: Πτολεμαῖος, Ptolemaios; Latin: Claudius Ptolemaeus; c. 100 – c. 170 AD)[1] was an Alexandrian mathematician, astronomer, astrologer, geographer, and music theorist[2] who wrote about a dozen scientific treatises, three of which were important to later Byzantine, Islamic, and Western European science. The first was his astronomical treatise now known as the Almagest, originally entitled Mathematical Treatise (Greek: Μαθηματικὴ Σύνταξις, Mathēmatikḗ Syntaxis). The second is the Geography, which is a thorough discussion on maps and the geographic knowledge of the Greco-Roman world. The third is the astrological treatise in which he attempted to adapt horoscopic astrology to the Aristotelian natural philosophy of his day. This is sometimes known as the Apotelesmatika (Greek: Αποτελεσματικά, lit. \'On the Effects\') but more commonly known as the Tetrábiblos, from the Koine Greek meaning "Four Books", or by its Latin equivalent Quadripartite. The Catholic Church promoted his work, which included the only mathematically sound geocentric model of the Solar System, and unlike most Greek mathematicians, Ptolemy\'s writings (foremost the Almagest) never ceased to be copied or commented upon, both in late antiquity and in the Middle Ages.[3] However, it is likely that only a few truly mastered the mathematics necessary to understand his works, as evidenced particularly by the many abridged and watered-down introductions to Ptolemy\'s astronomy that were popular among the Arabs and Byzantines.[4][5] His work on epicycles has come to symbolize a very complex theoretical model built in order to explain a false assumption.',
+        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Ptolemy_1476_with_armillary_sphere_model.jpg/440px-Ptolemy_1476_with_armillary_sphere_model.jpg',
+        imageTitle: 'Portrait of Ptolemy by Justus van Gent and Pedro Berruguete (1476)',
       },
       other_people: [
         {
@@ -86,6 +96,12 @@ export async function mock_list(start_year: number, end_year: number) {
         desc: 'Tridu Songtsen, emperor of Tibet (d. 704)',
         link: '/wiki/Tridu_Songtsen',
         death: 704,
+      },
+      person_detail: {
+        title: 'Tridu Songtsen',
+        intro: 'some intro',
+        imageUrl: undefined,
+        imageTitle: undefined,
       },
       other_people: [
         {

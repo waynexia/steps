@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import { mock_list } from './list'
-import { wikipedia_link_of_page, wikipedia_link_of_year } from './utils'
+import { build_list, mock_list } from './list'
+import { person_detail } from './fetch'
+import { wikipedia_link_of_page } from './utils'
 
 function App() {
-  const [list, setList] = useState<{ from: number, to: number, person: { desc: string, link: string | undefined, death: number | undefined }, other_people: { desc: string, link: string | undefined, death: number | undefined }[] }[]>([])
+  const [list, setList] = useState<{ from: number, to: number, person_detail: { title: string, intro: string, imageUrl: string | null, imageTitle: string | null }, person: { desc: string, link: string | undefined, death: number | undefined }, other_people: { desc: string, link: string | undefined, death: number | undefined }[] }[]>([])
 
   const [currentIndex, setCurrentIndex] = useState(0)
   const [currentTimelineHighlight, setCurrentTimelineHighlight] = useState(0)
@@ -11,8 +12,8 @@ function App() {
   // prepare (mock) data
   useEffect(() => {
     const fetchData = async () => {
-      // const data = await build_list(100, 800)
-      const data = await mock_list(100, 1000)
+      const data = await build_list(100, 200)
+      // const data = await mock_list(100, 1000)
       setList(data)
     }
 
@@ -39,7 +40,8 @@ function App() {
         <table>
           <tbody>
             {Array.from({ length: 1000 }).map((_, index) => (
-              <tr key={index} className={currentTimelineHighlight === index ? 'highlight' : ''}>
+              <tr key={index}>
+                <td className={`indicator ${currentTimelineHighlight === index ? 'highlight' : ''}`} />
                 <td>
                   Year
                   {' '}
@@ -51,13 +53,35 @@ function App() {
         </table>
       </div>
 
-      <div className="text-detail">
-        <h1>{ list.length === 0 ? 'loading...' : list[currentIndex].person.desc}</h1>
-        <p>description</p>
+      <div className="intro">
+        {
+          list.length === 0
+            ? 'loading...'
+            : (
+              <>
+                <h1><a href={wikipedia_link_of_page(list[currentIndex].person.link!)}>{list[currentIndex].person_detail.title}</a></h1>
+                <h2>{ `${list[currentIndex].from} ~ ${list[currentIndex].to}`}</h2>
+                <p className="text-detail-container">{ list[currentIndex].person_detail.intro}</p>
+              </>
+              )
+        }
       </div>
 
       <div className="photo">
-        some image
+        {
+          list.length === 0 || list[currentIndex].person_detail.imageUrl === undefined
+            ? 'some image'
+            : (
+              <div className="image-container">
+                <img
+                  src={list[currentIndex].person_detail.imageUrl!}
+                  alt={list[currentIndex].person_detail.title}
+                />
+                <br />
+                {list[currentIndex].person_detail.imageTitle}
+              </div>
+              )
+        }
       </div>
     </div>
 

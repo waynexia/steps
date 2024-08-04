@@ -23,24 +23,49 @@ td {
     text-align: center;
 }
 
-.highlight {
-    color: #ff0000;
+.indicator {
+    width: 1.5rem;
+    border-radius: 50%;
+    background-color: #00000000;
 }
 
-.text-detail {
-    flex: 2;
+.highlight {
+    background-color: red;
+}
+
+.intro {
+    flex: 3;
     padding: 20px;
     overflow-y: auto;
 
     overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.text-detail-container {
+    flex: 10;
+    border-radius: 20px;
+    padding: 1rem;
+    overflow-y: scroll;
+
+    background-color: #f0f0f0;
+
+    white-space: pre-wrap;
+    line-height: 1.5;
+    font-family: Arial, sans-serif;
 }
 
 .photo {
     flex: 2;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    text-align: center;
     padding: 20px;
+    font-size: 12px;
 
     overflow: hidden;
 }
@@ -49,4 +74,9 @@ td {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
+
+    background-color: #fff;
+    border: 8px solid #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 }
