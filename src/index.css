@@ -7,9 +7,12 @@ body {
     height: 100vh;
 }
 
+table {
+    border-collapse: collapse;
+}
+
 .timeline {
     flex: 1;
-    background-color: #f0f0f0;
 
     display: flex;
     flex-direction: column;
@@ -19,14 +22,31 @@ body {
     scrollbar-width: none;
 }
 
-td {
-    text-align: center;
+.sticky {
+    position: fixed;
+    top: 0;
+    background-color: white;
+    margin: 0;
+    border: 1rem solid white;
 }
 
-.indicator {
-    width: 1.5rem;
-    border-radius: 50%;
-    background-color: #00000000;
+td {
+    text-align: center;
+    min-width: 10px;
+    height: 10px;
+    border: none;
+}
+
+.inactive {
+    background-color: lightgray;
+}
+
+.left {
+    background-color: cyan;
+}
+
+.right {
+    background-color: orange;
 }
 
 .highlight {
@@ -44,16 +64,6 @@ td {
     flex-direction: column;
 }
 
-.intro h1 {
-    text-align: center;
-    margin: 5px;
-}
-
-.intro h2 {
-    text-align: center;
-    margin: 5px;
-}
-
 .text-detail-container {
     flex: 10;
     border-radius: 20px;
@@ -68,10 +78,6 @@ td {
     font-family: Arial, sans-serif;
 }
 
-.preview-next {
-    color: gray;
-}
-
 .photo {
     flex: 2;
     display: flex;
@@ -82,10 +88,6 @@ td {
     padding: 0 20px;
 
     overflow: hidden;
-}
-
-.subtitle {
-    font-size: 12px;
 }
 
 .people-counter {

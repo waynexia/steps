@@ -3,6 +3,7 @@ import caster from './assets/caster.avif'
 import { build_list, mock_list } from './list'
 import { person_detail } from './fetch'
 import { wikipedia_link_of_page, wikipedia_link_of_year } from './utils'
+import Timeline from './timeline'
 
 function App() {
   const [list, setList] = useState<{ from: number, to: number, person_detail: { title: string, intro: string, imageUrl: string | null, imageTitle: string | null }, person: { desc: string, link: string | undefined, death: number | undefined }, other_people: { desc: string, link: string | undefined, death: number | undefined }[] }[]>([])
@@ -12,7 +13,7 @@ function App() {
   const [isUpdating, setIsUpdating] = useState(false)
   const [isFinished, setIsFinished] = useState(false)
 
-  // const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear()
 
   // prepare (mock) data
   useEffect(() => {
@@ -33,8 +34,9 @@ function App() {
 
   const handleScroll: React.UIEventHandler<HTMLDivElement> = (e) => {
     const { scrollTop, scrollHeight, clientHeight } = e.target as HTMLDivElement
+    const scrollableHeight = scrollHeight * 1
     const position = Math.ceil(
-      (scrollTop / (scrollHeight - clientHeight)) * 1000,
+      (scrollTop / (scrollableHeight - clientHeight)) * 1000,
     )
     setCurrentTimelineHighlight(position)
 
@@ -68,7 +70,7 @@ function App() {
                   alt="image not available"
                 />
                 <br />
-                <div className="subtitle">image not available</div>
+                <div className="font-size-12px">image not available</div>
               </>
               )
             : (
@@ -78,7 +80,7 @@ function App() {
                   alt={list[currentIndex].person_detail.title}
                 />
                 <br />
-                <div className="subtitle">{list[currentIndex].person_detail.imageTitle}</div>
+                <div className="font-size-12px">{list[currentIndex].person_detail.imageTitle}</div>
               </>
               )
         }
@@ -107,23 +109,7 @@ function App() {
 
   return (
     <div className="gallery">
-      <div className="timeline" onScroll={handleScroll}>
-        <h3>Timeline</h3>
-        <table>
-          <tbody>
-            {Array.from({ length: 1000 }).map((_, index) => (
-              <tr key={index}>
-                <td className={`indicator ${currentTimelineHighlight === index ? 'highlight' : ''}`} />
-                <td>
-                  Year
-                  {' '}
-                  {index}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <Timeline list={list} currentTimelineHighlight={currentTimelineHighlight} handleScroll={handleScroll} endYear={currentYear} />
 
       <div className="intro">
         {
@@ -131,11 +117,12 @@ function App() {
             ? 'loading...'
             : (
               <>
-                <h1><a href={wikipedia_link_of_page(list[currentIndex].person.link!)}>{list[currentIndex].person_detail.title}</a></h1>
-                <h2>{`${list[currentIndex].from} ~ ${list[currentIndex].to} (aged ${list[currentIndex].to - list[currentIndex].from})`}</h2>
+                <h1 className="text-center m-5px"><a href={wikipedia_link_of_page(list[currentIndex].person.link!)}>{list[currentIndex].person_detail.title}</a></h1>
+                <h2 className="text-center m-5px">{`${list[currentIndex].from} ~ ${list[currentIndex].to} (aged ${list[currentIndex].to - list[currentIndex].from})`}</h2>
+                <p className="text-center">{list[currentIndex].person.desc}</p>
                 <p className="text-detail-container">{list[currentIndex].person_detail.intro}</p>
                 <div className="preview-next">
-                  <h1>{getNext()}</h1>
+                  <h1 className="text-center c-gray">{getNext()}</h1>
                 </div>
               </>
               )
