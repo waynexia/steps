@@ -12,6 +12,7 @@ function App() {
   const [currentTimelineHighlight, setCurrentTimelineHighlight] = useState(0)
   const [isUpdating, setIsUpdating] = useState(false)
   const [isFinished, setIsFinished] = useState(false)
+  const [isSwitching, setIsSwitching] = useState(false)
 
   const currentYear = new Date().getFullYear()
 
@@ -40,10 +41,20 @@ function App() {
     )
     setCurrentTimelineHighlight(position)
 
-    if (position > list[currentIndex].to && currentIndex < list.length - 1)
-      setCurrentIndex(currentIndex + 1)
-    else if (position < list[currentIndex].from && currentIndex > 0)
-      setCurrentIndex(currentIndex - 1)
+    if (position > list[currentIndex].to && currentIndex < list.length - 1) {
+      setIsSwitching(true)
+      setTimeout(() => {
+        setCurrentIndex(currentIndex + 1)
+        setIsSwitching(false)
+      }, 500)
+    }
+    else if (position < list[currentIndex].from && currentIndex > 0) {
+      setIsSwitching(true)
+      setTimeout(() => {
+        setCurrentIndex(currentIndex - 1)
+        setIsSwitching(false)
+      }, 500)
+    }
   }
 
   const getNext: () => string = () => {
@@ -111,7 +122,7 @@ function App() {
     <div className="gallery">
       <Timeline list={list} currentTimelineHighlight={currentTimelineHighlight} handleScroll={handleScroll} endYear={currentYear} />
 
-      <div className="intro">
+      <div className={`intro transition ${isSwitching ? 'switching' : ''}`}>
         {
           list.length === 0
             ? 'loading...'
@@ -129,7 +140,7 @@ function App() {
         }
       </div>
 
-      <div className="photo">
+      <div className={`photo transition ${isSwitching ? 'switching' : ''}`}>
         {getImageSidebar()}
       </div>
     </div>
