@@ -4,25 +4,27 @@ import { build_list, mock_list } from './list'
 import { person_detail } from './fetch'
 import { wikipedia_link_of_page, wikipedia_link_of_year } from './utils'
 import Timeline from './timeline'
+import Loading from './loading'
 
 function App() {
   const [list, setList] = useState<{ from: number, to: number, person_detail: { title: string, intro: string, imageUrl: string | null, imageTitle: string | null }, person: { desc: string, link: string | undefined, death: number | undefined }, other_people: { desc: string, link: string | undefined, death: number | undefined }[] }[]>([])
 
   const [currentIndex, setCurrentIndex] = useState(0)
   const [currentTimelineHighlight, setCurrentTimelineHighlight] = useState(0)
-  const [isUpdating, setIsUpdating] = useState(false)
+  // const [isUpdating, setIsUpdating] = useState(false)
   const [isFinished, setIsFinished] = useState(false)
   const [isSwitching, setIsSwitching] = useState(false)
+
+  const isUpdateStarted = useRef(false)
 
   const currentYear = new Date().getFullYear()
 
   // prepare (mock) data
   useEffect(() => {
     const fetchData = async () => {
-      // if (!isUpdating) {
-      //   setIsUpdating(true)
-      //   const data = await build_list(100, 300, setList)
-      //   setIsUpdating(true)
+      // if (!isUpdateStarted.current) {
+      //   isUpdateStarted.current = true
+      //   const data = await build_list(1, currentYear, setList)
       //   setIsFinished(true)
       // }
       const data = await mock_list(100, 1000)
@@ -31,15 +33,14 @@ function App() {
     }
 
     fetchData()
-  }, [isUpdating, isFinished])
+  }, [isFinished, currentYear])
 
   const handleScroll: React.UIEventHandler<HTMLDivElement> = (e) => {
     const { scrollTop, scrollHeight, clientHeight } = e.target as HTMLDivElement
-    const scrollableHeight = scrollHeight * 1
     const position = Math.ceil(
-      (scrollTop / (scrollableHeight - clientHeight)) * 1000,
+      ((scrollTop) / (scrollHeight - clientHeight)) * currentYear,
     )
-    setCurrentTimelineHighlight(position)
+    setCurrentTimelineHighlight(Math.min(position, currentYear))
 
     if (position > list[currentIndex].to && currentIndex < list.length - 1) {
       setIsSwitching(true)
@@ -99,7 +100,7 @@ function App() {
         <div className="people-counter">
           {list[currentIndex].other_people.length}
           {' '}
-          more people were born in
+          more well-known people were born in
           {' '}
           <a href={wikipedia_link_of_year(list[currentIndex].from)}>{list[currentIndex].from}</a>
         </div>
@@ -119,11 +120,14 @@ function App() {
   }
 
   return (
-    <div className="gallery">
-      <Timeline list={list} currentTimelineHighlight={currentTimelineHighlight} handleScroll={handleScroll} endYear={currentYear} />
+    list.length === 0
+      ? <Loading />
+      : (
+        <div className="gallery">
+          <Timeline list={list} currentTimelineHighlight={currentTimelineHighlight} handleScroll={handleScroll} endYear={currentYear} />
 
-      <div className={`intro transition ${isSwitching ? 'switching' : ''}`}>
-        {
+          <div className={`intro transition ${isSwitching ? 'switching' : ''}`}>
+            {
           list.length === 0
             ? 'loading...'
             : (
@@ -138,12 +142,13 @@ function App() {
               </>
               )
         }
-      </div>
+          </div>
 
-      <div className={`photo transition ${isSwitching ? 'switching' : ''}`}>
-        {getImageSidebar()}
-      </div>
-    </div>
+          <div className={`photo transition ${isSwitching ? 'switching' : ''}`}>
+            {getImageSidebar()}
+          </div>
+        </div>
+        )
 
   )
 }

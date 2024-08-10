@@ -5,15 +5,17 @@ export async function build_list(start_year: number, end_year: number, update_st
   let year = start_year
   const born_of_last_person = start_year
 
-  while (year <= end_year) {
+  while (year <= end_year - 30) {
     const people_born = await fetch_people_in(year)
     const people_next = people_born.filter(person => person.death !== undefined)
 
     // go back 1 year if this loop cannot continue
     if (people_next.length < 1) {
       year -= 1
-      if (year <= born_of_last_person)
+      if (year <= born_of_last_person) {
+        console.log(`failed to find next person in year ${year}`)
         break
+      }
       continue
     }
 

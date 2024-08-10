@@ -1,5 +1,6 @@
 function Timeline({ list, currentTimelineHighlight, handleScroll, endYear }) {
-  const table = Array.from({ length: endYear }).map((_, _index) => { return { color1: 'inactive', color2: 'inactive', should_show_year: false } })
+  const redundant = 3
+  const table = Array.from({ length: endYear + redundant }).map((_, _index) => { return { color1: 'inactive', color2: 'inactive', should_show_year: false } })
 
   if (list.length === 0)
     return 'loading'
@@ -23,6 +24,11 @@ function Timeline({ list, currentTimelineHighlight, handleScroll, endYear }) {
   table[0].should_show_year = true
   table[currentTimelineHighlight].color1 = 'highlight'
   table[currentTimelineHighlight].color2 = 'highlight'
+  table[endYear].should_show_year = true
+  for (let i = 0; i < redundant; i++) {
+    table[i + endYear].color1 = 'white'
+    table[i + endYear].color2 = 'white'
+  }
 
   return (
     <div className="timeline" onScroll={handleScroll}>
@@ -31,7 +37,7 @@ function Timeline({ list, currentTimelineHighlight, handleScroll, endYear }) {
       <div>
         <table>
           <tbody>
-            {Array.from({ length: 1000 }).map((_, index) => (
+            {Array.from({ length: endYear + redundant }).map((_, index) => (
               <tr key={index}>
                 <td className={table[index].color1} />
                 <td className={table[index].color2} />
