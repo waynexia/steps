@@ -8,6 +8,13 @@ function Loading() {
         <p className="m-1">It may take a while to load data from wikipedia.org</p>
         <p className="m-1">Tips: scroll the timeline on the left side</p>
       </div>
+      <script
+        data-goatcounter="https://waynest.goatcounter.com/count"
+        data-goatcounter-settings='{"path": "/steps"}'
+        async
+        src="//gc.zgo.at/count.js"
+      >
+      </script>
     </div>
   )
 }
