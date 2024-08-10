@@ -22,14 +22,14 @@ function App() {
   // prepare (mock) data
   useEffect(() => {
     const fetchData = async () => {
-      // if (!isUpdateStarted.current) {
-      //   isUpdateStarted.current = true
-      //   const data = await build_list(1, currentYear, setList)
-      //   setIsFinished(true)
-      // }
-      const data = await mock_list(100, 1000)
-      setList(data)
-      setIsFinished(true)
+      if (!isUpdateStarted.current) {
+        isUpdateStarted.current = true
+        const data = await build_list(1, currentYear, setList)
+        setIsFinished(true)
+      }
+      // const data = await mock_list(100, 1000)
+      // setList(data)
+      // setIsFinished(true)
     }
 
     fetchData()

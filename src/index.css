@@ -129,8 +129,8 @@ td {
 }
 
 .loading-spin {
-    width: 48px;
-    height: 48px;
+    width: 80px;
+    height: 80px;
     display: inline-block;
     position: relative;
     border: 2px solid gray;
@@ -149,18 +149,18 @@ td {
     bottom: 0;
     margin: auto;
     border: 2px solid gainsboro;
-    width: 38px;
-    height: 38px;
+    width: 60px;
+    height: 60px;
     animation: rotationBack 1.5s linear infinite;
     transform-origin: center center;
 }
 
 .loading-spin::before {
-    width: 28px;
-    height: 28px;
+    width: 40px;
+    height: 40px;
     border-color: black;
     box-sizing: border-box;
-    animation: rotation 1s linear infinite;
+    animation: rotation 1.2s linear infinite;
 }
 
 @keyframes rotation {
