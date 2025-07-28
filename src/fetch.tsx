@@ -15,16 +15,24 @@ export function extract_people_from_html(html: string) {
   }).map((_, el) => {
     const desc = $(el).text()
     const links = $(el).find('a')
-    if (links.length > 1) {
-      links.filter(function (_, _el) {
-        const matches = $(this).text().match(/\b(january|february|march|april|may|june|july|august|september|october|november|december)\b/i)
-        return matches === null || matches!.length === 0
+
+    // Filter out date links (months and days) to find the actual person link
+    let personLink = null
+    if (links.length > 0) {
+      const filteredLinks = links.filter(function (_, _el) {
+        const linkText = $(this).text()
+        // Check if this is a date link (month names or day numbers)
+        const isDateLink = linkText.match(/\b(january|february|march|april|may|june|july|august|september|october|november|december|\d{1,2})\b/i)
+        return !isDateLink
       })
+
+      // Use the first non-date link, or fall back to the first link if no non-date links found
+      personLink = filteredLinks.length > 0 ? filteredLinks.first().attr('href') : links.first().attr('href')
     }
-    const link = links.attr('href')
+
     const deathMatch = desc.match(/\(d\.( AD)? (\d+)/i)?.[2]
     const death = deathMatch ? Number.parseInt(deathMatch) : undefined
-    return { desc, link, death }
+    return { desc, link: personLink, death }
   }).get()
 
   return births.filter(

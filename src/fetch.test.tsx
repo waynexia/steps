@@ -62,3 +62,63 @@ describe('extract_people_from_html', () => {
     )
   })
 })
+
+describe('extract_people_from_450', () => {
+  it('should extract people from the HTML', () => {
+    const mockData = `
+    <h2><span class="mw-headline" id="Births">Births</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=AD_100&amp;action=edit&amp;section=10" title="Edit section: Births"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></h2>
+    <ul><li><a href="/wiki/February_2" title="February 2">February 2</a> – <a href="/wiki/Justin_I" title="Justin I">Justin I</a>, <a href="/wiki/List_of_Byzantine_emperors" title="List of Byzantine emperors">Byzantine Emperor</a> (d. <a href="/wiki/527" title="527">527</a>)</li>
+    <li><a href="/wiki/Ariadne_(empress)" title="Ariadne (empress)">Ariadne</a>, <a href="/wiki/List_of_Roman_and_Byzantine_Empresses" class="mw-redirect" title="List of Roman and Byzantine Empresses">Byzantine Empress</a> (approximate date)</li>
+    <li><a href="/wiki/Avitus_of_Vienne" title="Avitus of Vienne">Avitus</a>, <a href="/wiki/Ancient_Diocese_of_Vienne" class="mw-redirect" title="Ancient Diocese of Vienne">archbishop of Vienne</a> (approximate date) (d. <a href="/wiki/518" title="518">518</a>)</li>
+    <li><a href="/wiki/Chilperic_II_of_Burgundy" title="Chilperic II of Burgundy">Chilperic II</a>, king of <a href="/wiki/Kingdom_of_Burgundy" title="Kingdom of Burgundy">Burgundy</a> (approximate date)</li>
+    <li><a href="/wiki/Gunthamund" title="Gunthamund">Gunthamund</a>, king of the <a href="/wiki/Vandals" title="Vandals">Vandals</a> (d. <a href="/wiki/496" title="496">496</a>)</li>
+    <li><a href="/wiki/Isidore_of_Alexandria" title="Isidore of Alexandria">Isidore</a>, <a href="/wiki/Neoplatonism" title="Neoplatonism">Neoplatonist</a> philosopher (approximate date)</li>
+    <li><a href="/wiki/Pope_Hormisdas" title="Pope Hormisdas">Pope Hormisdas</a> (approximate date)</li>
+    <li><a href="/wiki/Thrasamund" title="Thrasamund">Thrasamund</a>, king of the Vandals (d. <a href="/wiki/523" title="523">523</a>)</li></ul>
+    `
+    const result = extract_people_from_html(mockData)
+
+    expect(result).toEqual([
+      {
+        death: 527,
+        desc: 'February 2 – Justin I, Byzantine Emperor (d. 527)',
+        link: '/wiki/Justin_I',
+      },
+      {
+        death: undefined,
+        desc: 'Ariadne, Byzantine Empress (approximate date)',
+        link: '/wiki/Ariadne_(empress)',
+      },
+      {
+        death: 518,
+        desc: 'Avitus, archbishop of Vienne (approximate date) (d. 518)',
+        link: '/wiki/Avitus_of_Vienne',
+      },
+      {
+        death: undefined,
+        desc: 'Chilperic II, king of Burgundy (approximate date)',
+        link: '/wiki/Chilperic_II_of_Burgundy',
+      },
+      {
+        death: 496,
+        desc: 'Gunthamund, king of the Vandals (d. 496)',
+        link: '/wiki/Gunthamund',
+      },
+      {
+        death: undefined,
+        desc: 'Isidore, Neoplatonist philosopher (approximate date)',
+        link: '/wiki/Isidore_of_Alexandria',
+      },
+      {
+        death: undefined,
+        desc: 'Pope Hormisdas (approximate date)',
+        link: '/wiki/Pope_Hormisdas',
+      },
+      {
+        death: 523,
+        desc: 'Thrasamund, king of the Vandals (d. 523)',
+        link: '/wiki/Thrasamund',
+      },
+    ])
+  })
+})
