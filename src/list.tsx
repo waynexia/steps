@@ -1,6 +1,6 @@
 import { fetch_people_in, person_detail } from './fetch'
 
-export async function build_list(start_year: number, end_year: number, update_state) {
+export async function build_list(start_year: number, end_year: number, update_state: (list: any[]) => void, showWarning: (message: string) => void) {
   const list = []
   let year = start_year
   const born_of_last_person = start_year
@@ -13,7 +13,8 @@ export async function build_list(start_year: number, end_year: number, update_st
     if (people_next.length < 1) {
       year -= 1
       if (year <= born_of_last_person) {
-        console.log(`failed to find next person in year ${year}`)
+        if (showWarning)
+          showWarning(`Failed to find next person in year ${year}`)
         break
       }
       continue
@@ -23,7 +24,7 @@ export async function build_list(start_year: number, end_year: number, update_st
     const random_person = people_next[Math.floor(Math.random() * people_next.length)]
 
     // fill details of this person
-    const detail = await person_detail(random_person.link!)
+    const detail = await person_detail(random_person.link!, showWarning)
 
     list.push({
       from: year,
@@ -42,9 +43,7 @@ export async function build_list(start_year: number, end_year: number, update_st
   return list
 }
 
-export async function mock_list(start_year: number, end_year: number) {
-  const _start_year = start_year
-  const _end_year = end_year
+export async function mock_list(_start_year: number, _end_year: number) {
   const mock_result = [
     {
       from: 100,

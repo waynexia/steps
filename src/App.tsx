@@ -14,17 +14,31 @@ function App() {
   // const [isUpdating, setIsUpdating] = useState(false)
   const [isFinished, setIsFinished] = useState(false)
   const [isSwitching, setIsSwitching] = useState(false)
+  const [warnings, setWarnings] = useState<{ id: number, message: string }[]>([])
 
   const isUpdateStarted = useRef(false)
+  const warningIdCounter = useRef(0)
 
   const currentYear = new Date().getFullYear()
+
+  // Warning system
+  const showWarning = (message: string) => {
+    const id = warningIdCounter.current++
+    console.error('Warning:', message)
+    setWarnings(prev => [...prev, { id, message }])
+
+    // Auto-remove after 3 seconds
+    setTimeout(() => {
+      setWarnings(prev => prev.filter(w => w.id !== id))
+    }, 3000)
+  }
 
   // prepare (mock) data
   useEffect(() => {
     const fetchData = async () => {
       if (!isUpdateStarted.current) {
         isUpdateStarted.current = true
-        const data = await build_list(1, currentYear, setList)
+        await build_list(1, currentYear, setList, showWarning)
         setIsFinished(true)
       }
       // const data = await mock_list(100, 1000)
@@ -108,8 +122,8 @@ function App() {
         <h2>Other people</h2>
         <div className="other-people">
           <ul>
-            {list[currentIndex].other_people.map((person, index) => (
-              <li key={index}>
+            {list[currentIndex].other_people.map(person => (
+              <li key={person.link || person.desc}>
                 <a href={wikipedia_link_of_page(person.link!)}>{person.desc}</a>
               </li>
             ))}
@@ -120,36 +134,48 @@ function App() {
   }
 
   return (
-    list.length === 0
-      ? <Loading />
-      : (
-        <div className="gallery">
-          <Timeline list={list} currentTimelineHighlight={currentTimelineHighlight} handleScroll={handleScroll} endYear={currentYear} />
-
-          <div className={`intro transition ${isSwitching ? 'switching' : ''}`}>
-            {
-          list.length === 0
-            ? 'loading...'
-            : (
-              <>
-                <h1 className="text-center m-5px"><a href={wikipedia_link_of_page(list[currentIndex].person.link!)}>{list[currentIndex].person_detail.title}</a></h1>
-                <h2 className="text-center m-5px">{`${list[currentIndex].from} ~ ${list[currentIndex].to} (aged ${list[currentIndex].to - list[currentIndex].from})`}</h2>
-                <p className="text-center">{list[currentIndex].person.desc}</p>
-                <p className="text-detail-container">{list[currentIndex].person_detail.intro}</p>
-                <div className="preview-next">
-                  <h1 className="text-center c-gray">{getNext()}</h1>
-                </div>
-              </>
-              )
-        }
-          </div>
-
-          <div className={`photo transition ${isSwitching ? 'switching' : ''}`}>
-            {getImageSidebar()}
-          </div>
+    <>
+      {/* Warning notifications */}
+      {warnings.length > 0 && (
+        <div className="warnings-container">
+          {warnings.map(warning => (
+            <div key={warning.id} className="warning-notification">
+              {warning.message}
+            </div>
+          ))}
         </div>
-        )
+      )}
 
+      {list.length === 0
+        ? <Loading />
+        : (
+          <div className="gallery">
+            <Timeline list={list} currentTimelineHighlight={currentTimelineHighlight} handleScroll={handleScroll} endYear={currentYear} />
+
+            <div className={`intro transition ${isSwitching ? 'switching' : ''}`}>
+              {
+            list.length === 0
+              ? 'loading...'
+              : (
+                <>
+                  <h1 className="text-center m-5px"><a href={wikipedia_link_of_page(list[currentIndex].person.link!)}>{list[currentIndex].person_detail.title}</a></h1>
+                  <h2 className="text-center m-5px">{`${list[currentIndex].from} ~ ${list[currentIndex].to} (aged ${list[currentIndex].to - list[currentIndex].from})`}</h2>
+                  <p className="text-center">{list[currentIndex].person.desc}</p>
+                  <p className="text-detail-container">{list[currentIndex].person_detail.intro}</p>
+                  <div className="preview-next">
+                    <h1 className="text-center c-gray">{getNext()}</h1>
+                  </div>
+                </>
+                )
+          }
+            </div>
+
+            <div className={`photo transition ${isSwitching ? 'switching' : ''}`}>
+              {getImageSidebar()}
+            </div>
+          </div>
+          )}
+    </>
   )
 }
 

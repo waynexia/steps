@@ -122,3 +122,63 @@ describe('extract_people_from_450', () => {
     ])
   })
 })
+
+describe('extract_people_from_874', () => {
+  it('should extract people from the HTML', () => {
+    const mockData = `
+    <h2><span class="mw-headline" id="Births">Births</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=AD_874&amp;action=edit&amp;section=10" title="Edit section: Births"><span>edit</span></a><span class="mw-editsection-bracket">]</span></span></h2>
+    <ul><li>May 10 – <a href="/wiki/Meng_Zhixiang" title="Meng Zhixiang">Meng Zhixiang</a>, general of <a href="/wiki/Later_Tang" title="Later Tang">Later Tang</a> (d. 934)</li>
+    <li><a href="/wiki/Abu_al-Hasan_al-Ash%27ari" title="Abu al-Hasan al-Ash'ari">Abu al-Hasan al-Ash'ari</a>, Muslim scholar (d. 936)</li>
+    <li><a href="/wiki/Edward_the_Elder" title="Edward the Elder">Edward the Elder</a>, king of <a href="/wiki/Wessex" title="Wessex">Wessex</a> (approximate date)</li>
+    <li><a href="/wiki/Constantine_II_of_Scotland" title="Constantine II of Scotland">Constantine II</a>, king of <a href="/wiki/Kingdom_of_Scotland" title="Kingdom of Scotland">Scotland</a> (approximate date)</li>
+    <li><a href="/wiki/Liu_Yin_(Southern_Han)" title="Liu Yin (Southern Han)">Liu Yin</a>, governor (<i><a href="/wiki/Jiedushi" title="Jiedushi">jiedushi</a></i>) of <a href="/wiki/Southern_Han" title="Southern Han">Southern Han</a> (d. <a href="/wiki/AD_911" title="AD 911">911</a>)</li>
+    <li><a href="/wiki/Lothar_II,_Count_of_Stade" title="Lothar II, Count of Stade">Lothar II</a>, Frankish <a href="/wiki/Nobility" title="Nobility">nobleman</a> (d. 929)</li>
+    <li><a href="/wiki/Ota_(wife_of_Arnulf_of_Carinthia)" title="Ota (wife of Arnulf of Carinthia)">Ota</a>, Frankish queen and <a href="/wiki/List_of_Holy_Roman_Empresses" class="mw-redirect" title="List of Holy Roman Empresses">Holy Roman Empress</a> (approximate date)</li>
+    <li><a href="/wiki/Wang_Shifan" title="Wang Shifan">Wang Shifan</a>, Chinese <a href="/wiki/Warlord" title="Warlord">warlord</a> (d. 908)</li></ul>
+    `
+    const result = extract_people_from_html(mockData)
+
+    expect(result).toEqual([
+      {
+        death: 934,
+        desc: 'May 10 – Meng Zhixiang, general of Later Tang (d. 934)',
+        link: '/wiki/Meng_Zhixiang',
+      },
+      {
+        death: 936,
+        desc: 'Abu al-Hasan al-Ash\'ari, Muslim scholar (d. 936)',
+        link: '/wiki/Abu_al-Hasan_al-Ash\'ari',
+      },
+      {
+        death: undefined,
+        desc: 'Edward the Elder, king of Wessex (approximate date)',
+        link: '/wiki/Edward_the_Elder',
+      },
+      {
+        death: undefined,
+        desc: 'Constantine II, king of Scotland (approximate date)',
+        link: '/wiki/Constantine_II_of_Scotland',
+      },
+      {
+        death: 911,
+        desc: 'Liu Yin, governor (jiedushi) of Southern Han (d. 911)',
+        link: '/wiki/Liu_Yin_(Southern_Han)',
+      },
+      {
+        death: 929,
+        desc: 'Lothar II, Frankish nobleman (d. 929)',
+        link: '/wiki/Lothar_II,_Count_of_Stade',
+      },
+      {
+        death: undefined,
+        desc: 'Ota, Frankish queen and Holy Roman Empress (approximate date)',
+        link: '/wiki/Ota_(wife_of_Arnulf_of_Carinthia)',
+      },
+      {
+        death: 908,
+        desc: 'Wang Shifan, Chinese warlord (d. 908)',
+        link: '/wiki/Wang_Shifan',
+      },
+    ])
+  })
+})
