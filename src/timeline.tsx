@@ -1,4 +1,6 @@
-function Timeline({ list, currentTimelineHighlight, handleScroll, endYear }) {
+import { forwardRef } from 'react'
+
+const Timeline = forwardRef<HTMLDivElement, { list: any, currentTimelineHighlight: any, handleScroll: any, endYear: any }>(({ list, currentTimelineHighlight, handleScroll, endYear }, ref) => {
   const redundant = 3
   const table = Array.from({ length: endYear + redundant }).map((_, _index) => { return { color1: 'inactive', color2: 'inactive', should_show_year: false } })
 
@@ -31,14 +33,14 @@ function Timeline({ list, currentTimelineHighlight, handleScroll, endYear }) {
   }
 
   return (
-    <div className="timeline" onScroll={handleScroll}>
+    <div className="timeline" onScroll={handleScroll} ref={ref}>
       <h3 className="sticky">Timeline</h3>
       <h3> - </h3>
       <div>
         <table>
           <tbody>
             {Array.from({ length: endYear + redundant }).map((_, index) => (
-              <tr key={index}>
+              <tr key={`timeline-row-${index}`}>
                 <td className={table[index].color1} />
                 <td className={table[index].color2} />
                 <td>
@@ -53,6 +55,8 @@ function Timeline({ list, currentTimelineHighlight, handleScroll, endYear }) {
       </div>
     </div>
   )
-}
+})
+
+Timeline.displayName = 'Timeline'
 
 export default Timeline

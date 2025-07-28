@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import caster from './assets/caster.avif'
-import { build_list, mock_list } from './list'
-import { person_detail } from './fetch'
+import { build_list } from './list'
 import { wikipedia_link_of_page, wikipedia_link_of_year } from './utils'
 import Timeline from './timeline'
 import Loading from './loading'
@@ -18,6 +17,7 @@ function App() {
 
   const isUpdateStarted = useRef(false)
   const warningIdCounter = useRef(0)
+  const timelineRef = useRef<HTMLDivElement>(null)
 
   const currentYear = new Date().getFullYear()
 
@@ -49,7 +49,7 @@ function App() {
     fetchData()
   }, [isFinished, currentYear])
 
-  const handleScroll: React.UIEventHandler<HTMLDivElement> = (e) => {
+  const handleScroll = useCallback<React.UIEventHandler<HTMLDivElement>>((e) => {
     const { scrollTop, scrollHeight, clientHeight } = e.target as HTMLDivElement
     const position = Math.ceil(
       ((scrollTop) / (scrollHeight - clientHeight)) * currentYear,
@@ -70,7 +70,45 @@ function App() {
         setIsSwitching(false)
       }, 500)
     }
-  }
+  }, [currentYear, list, currentIndex])
+
+  // Global wheel event handler for page-wide scrolling
+  useEffect(() => {
+    const handleGlobalWheel = (e: WheelEvent) => {
+      // Check if the event target is within a scrollable area
+      const target = e.target as Element
+      const isInScrollableArea = target.closest('.text-detail-container')
+        || target.closest('.other-people')
+        || target.closest('.timeline')
+
+      // If not in a scrollable area, handle the scroll globally
+      if (!isInScrollableArea && timelineRef.current) {
+        e.preventDefault()
+
+        // Simulate scroll on timeline
+        const timeline = timelineRef.current
+        const scrollAmount = e.deltaY
+        timeline.scrollTop += scrollAmount
+
+        // Create a synthetic scroll event and trigger the handler
+        const syntheticEvent = {
+          target: {
+            scrollTop: timeline.scrollTop,
+            scrollHeight: timeline.scrollHeight,
+            clientHeight: timeline.clientHeight,
+          },
+        } as unknown as React.UIEvent<HTMLDivElement>
+
+        handleScroll(syntheticEvent)
+      }
+    }
+
+    document.addEventListener('wheel', handleGlobalWheel, { passive: false })
+
+    return () => {
+      document.removeEventListener('wheel', handleGlobalWheel)
+    }
+  }, [handleScroll]) // Only depend on handleScroll
 
   const getNext: () => string = () => {
     if (list[currentIndex + 1] === undefined && isFinished)
@@ -150,7 +188,13 @@ function App() {
         ? <Loading />
         : (
           <div className="gallery">
-            <Timeline list={list} currentTimelineHighlight={currentTimelineHighlight} handleScroll={handleScroll} endYear={currentYear} />
+            <Timeline
+              list={list}
+              currentTimelineHighlight={currentTimelineHighlight}
+              handleScroll={handleScroll}
+              endYear={currentYear}
+              ref={timelineRef}
+            />
 
             <div className={`intro transition ${isSwitching ? 'switching' : ''}`}>
               {
