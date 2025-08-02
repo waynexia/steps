@@ -39,13 +39,13 @@ const Timeline = forwardRef<HTMLDivElement, { list: any, currentTimelineHighligh
       <div>
         <table>
           <tbody>
-            {Array.from({ length: endYear + redundant }).map((_, index) => (
-              <tr key={`timeline-row-${index}`}>
-                <td className={table[index].color1} />
-                <td className={table[index].color2} />
+            {Array.from({ length: endYear + redundant }, (_, index) => index).map(year => (
+              <tr key={`timeline-year-${year}`}>
+                <td className={table[year].color1} />
+                <td className={table[year].color2} />
                 <td>
                   {' '}
-                  {table[index].should_show_year ? index : '' }
+                  {table[year].should_show_year ? year : '' }
                   {' '}
                 </td>
               </tr>

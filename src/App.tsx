@@ -4,6 +4,7 @@ import { build_list } from './list'
 import { wikipedia_link_of_page, wikipedia_link_of_year } from './utils'
 import Timeline from './timeline'
 import Loading from './loading'
+import GlobalBackgroundStars from './components/GlobalBackgroundStars'
 
 function App() {
   const [list, setList] = useState<{ from: number, to: number, person_detail: { title: string, intro: string, imageUrl: string | null, imageTitle: string | null }, person: { desc: string, link: string | undefined, death: number | undefined }, other_people: { desc: string, link: string | undefined, death: number | undefined }[] }[]>([])
@@ -173,6 +174,9 @@ function App() {
 
   return (
     <>
+      {/* Global Background Stars - fixed position, covers entire page */}
+      <GlobalBackgroundStars />
+
       {/* Warning notifications */}
       {warnings.length > 0 && (
         <div className="warnings-container">

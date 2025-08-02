@@ -1,6 +1,6 @@
 function Loading() {
   return (
-    <div className="flex h-100vh w-100vw justify-center align-items-center">
+    <div className="flex h-100vh w-100vw justify-center align-items-center" style={{ color: '#64ffda' }}>
       <span className="loading-spin"></span>
       <div className="w-10" />
       <div>
