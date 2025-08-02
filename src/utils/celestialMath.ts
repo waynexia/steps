@@ -11,6 +11,7 @@ export interface TimelineConfig {
 
 /**
  * Maps a year to its Y-coordinate position on the timeline
+ * Each year takes approximately 10px height (matching current table rows)
  */
 export function yearToYPosition(
   year: number,
@@ -22,6 +23,26 @@ export function yearToYPosition(
 
   // Linear mapping from year to Y position
   return (yearOffset / totalYears) * timelineHeight
+}
+
+/**
+ * Simple year to position mapping for compatibility with existing table-based approach
+ * Each year takes 10px height
+ */
+export function getYearPosition(year: number): number {
+  return year * 10 // 10px per year, matching current table rows
+}
+
+/**
+ * Calculate constellation X position based on index and whether it's start or end
+ * Timeline width divided into 5 zones for visual separation
+ */
+export function getConstellationXPosition(index: number, isStart: boolean): number {
+  const zones = [0.1, 0.25, 0.5, 0.75, 0.9] // percentage of timeline width
+  const zoneIndex = isStart
+    ? (index % 2 === 0 ? 0 : 1) // birth stars: far-left or left
+    : (index % 2 === 0 ? 3 : 4) // death stars: right or far-right
+  return zones[zoneIndex] * 100 // convert to percentage
 }
 
 /**

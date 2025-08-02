@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import caster from './assets/caster.avif'
 import { build_list } from './list'
 import { wikipedia_link_of_page, wikipedia_link_of_year } from './utils'
-import Timeline from './timeline'
+import CelestialTimeline from './components/celestial/CelestialTimeline'
 import Loading from './loading'
 import GlobalBackgroundStars from './components/GlobalBackgroundStars'
 
@@ -192,11 +192,12 @@ function App() {
         ? <Loading />
         : (
           <div className="gallery">
-            <Timeline
+            <CelestialTimeline
               list={list}
               currentTimelineHighlight={currentTimelineHighlight}
               handleScroll={handleScroll}
               endYear={currentYear}
+              currentIndex={currentIndex}
               ref={timelineRef}
             />
 
