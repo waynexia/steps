@@ -1,0 +1,39 @@
+/* Celestial Theme CSS Variables */
+:root {
+  /* Cosmic Background Colors */
+  --cosmic-deep-black: #0a0a0f;
+  --cosmic-dark-blue: #1a1a2e;
+  --cosmic-medium-blue: #16213e;
+  --cosmic-accent-blue: #0f3460;
+  
+  /* Star Colors */
+  --star-white: #ffffff;
+  --star-blue: #a8c8ff;
+  --star-yellow: #fff4a3;
+  --star-red: #ffb3a3;
+  
+  /* Glow Effects */
+  --glow-radius-small: 4px;
+  --glow-radius-medium: 8px;
+  --glow-radius-large: 16px;
+  
+  /* Animation Timings */
+  --twinkle-slow: 8s;
+  --twinkle-medium: 6s;
+  --twinkle-fast: 4s;
+  
+  /* Performance-optimized easing */
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  
+  /* Constellation colors (for CSS calculations) */
+  --primary-celestial: #64ffda;
+  --primary-celestial-rgb: 100, 255, 218;
+  
+  /* Z-index Layers */
+  --z-background: 1;
+  --z-stars: 2;
+  --z-constellations: 3;
+  --z-comet: 4;
+  --z-ui: 10;
+}

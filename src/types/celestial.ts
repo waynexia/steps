@@ -1,13 +1,23 @@
-export interface BackgroundStar {
-  id: string
-  x: number
-  y: number
-  size: number // 0, 1, 2 for small, medium, large
-  opacity: number
-  twinkleSpeed: number // 0, 1, 2 for slow, medium, fast
-  twinkleCount?: number // Number of times this star has twinkled
-  maxTwinkles?: number // Maximum twinkles before disappearing
-  isDisappearing?: boolean // Whether star is in disappearing animation
+// Person data interfaces
+export interface Person {
+  desc: string
+  link?: string
+  death?: number
+}
+
+export interface PersonDetail {
+  title: string
+  intro: string
+  imageUrl: string | null
+  imageTitle: string | null
+}
+
+export interface TimelineItem {
+  from: number
+  to: number
+  person: Person
+  person_detail: PersonDetail
+  other_people: Person[]
 }
 
 export interface CelestialStar {
@@ -22,17 +32,10 @@ export interface Constellation {
   birthStar: CelestialStar
   deathStar: CelestialStar
   isActive: boolean // currently viewing this person
-  isSelected: boolean // user has interacted with this constellation
   side: 'left' | 'right' // Which side of central timeline to render
 }
 
-export interface CelestialTimelineData {
-  from: number // birth year (existing)
-  to: number // death year (existing)
-  person: any // existing person data
-  person_detail: any // existing detail data
-  other_people: any[] // existing other people data
-  // New celestial properties
+export interface CelestialTimelineData extends TimelineItem {
   constellation: Constellation
 }
 

@@ -1,0 +1,119 @@
+/* Background Star Styles */
+.star-field {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: var(--z-stars);
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Individual Star Styles */
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--star-white);
+  box-shadow: 0 0 var(--glow-radius-small) currentColor;
+}
+
+.star::before,
+.star::after {
+  content: '';
+  position: absolute;
+  background: currentColor;
+  border-radius: 50%;
+  opacity: 0.3;
+}
+
+/* Create star spike effect */
+.star::before {
+  width: 100%;
+  height: 20%;
+  top: 40%;
+  left: 0;
+  box-shadow: 0 0 calc(var(--glow-radius-small) * 0.3) currentColor;
+}
+
+.star::after {
+  width: 20%;
+  height: 100%;
+  top: 0;
+  left: 40%;
+  box-shadow: 0 0 calc(var(--glow-radius-small) * 0.3) currentColor;
+}
+
+/* Star Size Variants */
+.star--small {
+  width: 1px;
+  height: 1px;
+}
+
+.star--medium {
+  width: 2px;
+  height: 2px;
+  box-shadow: 0 0 var(--glow-radius-medium) currentColor;
+}
+
+.star--medium::before,
+.star--medium::after {
+  box-shadow: 0 0 calc(var(--glow-radius-medium) * 0.4) currentColor;
+}
+
+.star--large {
+  width: 3px;
+  height: 3px;
+  box-shadow: 0 0 var(--glow-radius-large) currentColor;
+}
+
+.star--large::before,
+.star--large::after {
+  box-shadow: 0 0 calc(var(--glow-radius-large) * 0.5) currentColor;
+}
+
+/* Star Color Variants */
+.star--blue {
+  background: var(--star-blue);
+  color: var(--star-blue);
+}
+
+.star--yellow {
+  background: var(--star-yellow);
+  color: var(--star-yellow);
+}
+
+.star--red {
+  background: var(--star-red);
+  color: var(--star-red);
+}
+
+/* Twinkling Animation Classes - Performance optimized */
+.star--twinkle-slow {
+  animation: twinkle-slow-finite var(--twinkle-slow) var(--ease-in-out-quart);
+  animation-iteration-count: var(--twinkle-iterations, 3);
+  animation-fill-mode: forwards;
+  will-change: opacity, transform;
+}
+
+.star--twinkle-medium {
+  animation: twinkle-medium-finite var(--twinkle-medium) var(--ease-in-out-quart);
+  animation-iteration-count: var(--twinkle-iterations, 4);
+  animation-fill-mode: forwards;
+  will-change: opacity, transform;
+}
+
+.star--twinkle-fast {
+  animation: twinkle-fast-finite var(--twinkle-fast) var(--ease-in-out-quart);
+  animation-iteration-count: var(--twinkle-iterations, 5);
+  animation-fill-mode: forwards;
+  will-change: opacity, transform;
+}
+
+.star--disappearing {
+  animation: star-fade-out 3s ease-in forwards;
+}
+
+.star--appearing {
+  animation: star-appear 2s ease-out forwards;
+}

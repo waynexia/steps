@@ -1,0 +1,65 @@
+/* Timeline Styles */
+
+/* Timeline Spine */
+.timeline-spine {
+  box-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
+}
+
+/* Timeline Gaps */
+.timeline-gap {
+  transition: opacity 0.3s ease-in-out;
+  border-radius: 2px;
+}
+
+.timeline-gap:hover {
+  opacity: 0.5 !important;
+}
+
+/* Year Labels for celestial timeline */
+.year-label {
+  color: #64ffda;
+  text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+  font-family: 'Courier New', monospace; /* cosmic/technical feel */
+  font-size: 12px;
+  pointer-events: none;
+  z-index: var(--z-ui);
+}
+
+.year-label--milestone {
+  font-size: 14px;
+  font-weight: bold;
+  text-shadow: 0 0 15px rgba(100, 255, 218, 0.8);
+}
+
+/* Comet (Year Marker) */
+.comet-head {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #64ffda 40%, #1a1a2e 100%);
+  box-shadow:
+    0 0 20px #64ffda,
+    0 0 40px #64ffda,
+    0 0 60px rgba(100, 255, 218, 0.3);
+  z-index: var(--z-comet);
+  transform: translateX(-50%);
+}
+
+/* Celestial Timeline Container */
+.celestial-timeline {
+  background: transparent;
+}
+
+.celestial-timeline-container {
+  background: transparent;
+  min-height: 100vh;
+}
+
+/* Placeholder Lines for uncovered years */
+.placeholder-line {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.placeholder-line:hover {
+  opacity: 0.6 !important;
+}

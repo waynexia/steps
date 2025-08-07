@@ -1,12 +1,12 @@
-import React, { useMemo } from 'react'
-import type { CelestialTimelineData, TimelineSpine } from '../../types/celestial'
-import { getYearPosition } from '../../utils/celestialMath'
+import React, { useMemo, memo, useCallback } from 'react'
+import type { CelestialTimelineData, TimelineSpine, TimelineItem, Person } from '../../types/celestial'
+import { getYearPosition, getConstellationXPosition, TIMELINE_CONFIG } from '../../utils/celestialMath'
 import { assignColorByName } from '../../utils/colorPalette'
 import Constellation from './Constellation'
 import '../../styles/celestial.css'
 
 interface CelestialTimelineProps {
-  list: any[]
+  list: TimelineItem[]
   currentTimelineHighlight: number
   handleScroll: (e: React.UIEvent<HTMLDivElement>) => void
   endYear: number
@@ -67,9 +67,8 @@ const CelestialTimeline = React.forwardRef<HTMLDivElement, CelestialTimelineProp
       // Alternate sides for overlapping effect
       const side = index % 2 === 0 ? 'left' : 'right'
 
-      // Position stars on alternating sides of central spine
-      const birthX = side === 'left' ? 35 : 65 // 35% or 65% from left
-      const deathX = birthX // Same X for vertical constellation
+      // Position stars using calculated positions
+      const starX = getConstellationXPosition(index)
 
       return {
         ...item,
@@ -77,26 +76,41 @@ const CelestialTimeline = React.forwardRef<HTMLDivElement, CelestialTimelineProp
           id: `constellation-${index}`,
           color,
           birthStar: {
-            x: birthX,
+            x: starX,
             y: getYearPosition(item.from),
-            size: 'large' as const, // Fixed large size
+            size: 'large' as const,
           },
           deathStar: {
-            x: deathX,
+            x: starX,
             y: getYearPosition(item.to),
-            size: 'large' as const, // Fixed large size
+            size: 'large' as const,
           },
           isActive: index === currentIndex,
-          isSelected: false,
           side,
         },
       }
     })
   }, [list, currentIndex])
 
-  const handleConstellationClick = (_person: any) => {
+  const handleConstellationClick = useCallback((_person: Person) => {
     // TODO: Implement proper constellation selection
-  }
+  }, [])
+
+  // Memoize gap calculations for uncovered timeline years
+  const timelineGaps = useMemo(() => {
+    return timelineSpine
+      .reduce((gaps: { start: number, end: number }[], spinePoint, index) => {
+        if (!spinePoint.hasConstellation && index > 0) {
+          const lastGap = gaps[gaps.length - 1]
+          if (lastGap && lastGap.end === index - 1)
+            lastGap.end = index
+          else
+            gaps.push({ start: index, end: index })
+        }
+        return gaps
+      }, [])
+      .filter(gap => gap.end - gap.start > 5) // Only show gaps > 5 years
+  }, [timelineSpine])
 
   if (list.length === 0)
     return <div className="timeline">Loading celestial timeline...</div>
@@ -118,9 +132,9 @@ const CelestialTimeline = React.forwardRef<HTMLDivElement, CelestialTimelineProp
           className="timeline-spine"
           style={{
             position: 'absolute',
-            left: '50%',
+            left: `${TIMELINE_CONFIG.CENTRAL_SPINE_POSITION}%`,
             top: '0',
-            width: '4px',
+            width: `${TIMELINE_CONFIG.SPINE_WIDTH}px`,
             height: `${timelineHeight}px`,
             background: 'linear-gradient(to bottom, #64ffda 0%, #3742fa 50%, #64ffda 100%)',
             transform: 'translateX(-50%)',
@@ -139,7 +153,7 @@ const CelestialTimeline = React.forwardRef<HTMLDivElement, CelestialTimelineProp
               style={{
                 position: 'absolute',
                 top: `${getYearPosition(year)}px`,
-                left: '50%',
+                left: `${TIMELINE_CONFIG.CENTRAL_SPINE_POSITION}%`,
                 transform: 'translateX(-50%)',
                 zIndex: 10,
                 backgroundColor: 'rgba(10, 10, 15, 0.8)',
@@ -157,7 +171,7 @@ const CelestialTimeline = React.forwardRef<HTMLDivElement, CelestialTimelineProp
           style={{
             position: 'absolute',
             top: `${getYearPosition(currentTimelineHighlight)}px`,
-            left: '50%',
+            left: `${TIMELINE_CONFIG.CENTRAL_SPINE_POSITION}%`,
             transform: 'translate(-50%, -50%)',
             zIndex: 15,
           }}
@@ -175,25 +189,13 @@ const CelestialTimeline = React.forwardRef<HTMLDivElement, CelestialTimelineProp
         ))}
 
         {/* Timeline coverage indicators (subtle background for uncovered years) */}
-        {timelineSpine
-          .reduce((gaps: { start: number, end: number }[], spinePoint, index) => {
-            if (!spinePoint.hasConstellation && index > 0) {
-              const lastGap = gaps[gaps.length - 1]
-              if (lastGap && lastGap.end === index - 1)
-                lastGap.end = index
-              else
-                gaps.push({ start: index, end: index })
-            }
-            return gaps
-          }, [])
-          .filter(gap => gap.end - gap.start > 5) // Only show gaps > 5 years
-          .map(gap => (
+        {timelineGaps.map(gap => (
             <div
               key={`gap-${gap.start}-${gap.end}`}
               className="timeline-gap"
               style={{
                 position: 'absolute',
-                left: '48%',
+                left: `${TIMELINE_CONFIG.CENTRAL_SPINE_POSITION - 2}%`,
                 top: `${getYearPosition(gap.start)}px`,
                 width: '4%',
                 height: `${getYearPosition(gap.end) - getYearPosition(gap.start)}px`,

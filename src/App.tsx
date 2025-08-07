@@ -5,9 +5,10 @@ import { wikipedia_link_of_page, wikipedia_link_of_year } from './utils'
 import CelestialTimeline from './components/celestial/CelestialTimeline'
 import Loading from './loading'
 import GlobalBackgroundStars from './components/GlobalBackgroundStars'
+import type { TimelineItem } from './types/celestial'
 
 function App() {
-  const [list, setList] = useState<{ from: number, to: number, person_detail: { title: string, intro: string, imageUrl: string | null, imageTitle: string | null }, person: { desc: string, link: string | undefined, death: number | undefined }, other_people: { desc: string, link: string | undefined, death: number | undefined }[] }[]>([])
+  const [list, setList] = useState<TimelineItem[]>([])
 
   const [currentIndex, setCurrentIndex] = useState(0)
   const [currentTimelineHighlight, setCurrentTimelineHighlight] = useState(0)

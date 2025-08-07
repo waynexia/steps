@@ -1,5 +1,5 @@
-import React from 'react'
-import type { CelestialTimelineData } from '../../types/celestial'
+import React, { memo } from 'react'
+import type { CelestialTimelineData, Person } from '../../types/celestial'
 import { getYearPosition } from '../../utils/celestialMath'
 import '../../styles/celestial.css'
 
@@ -7,10 +7,10 @@ interface ConstellationProps {
   data: CelestialTimelineData
   timelineHeight: number
   isActive: boolean // replaces current highlight logic
-  onClick: (person: any) => void
+  onClick: (person: Person) => void
 }
 
-const Constellation: React.FC<ConstellationProps> = ({
+const Constellation: React.FC<ConstellationProps> = memo(({
   data,
   timelineHeight: _timelineHeight,
   isActive,
@@ -97,6 +97,8 @@ const Constellation: React.FC<ConstellationProps> = ({
       </div>
     </div>
   )
-}
+})
+
+Constellation.displayName = 'Constellation'
 
 export default Constellation

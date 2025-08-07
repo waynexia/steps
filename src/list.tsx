@@ -1,7 +1,8 @@
 import { fetch_people_in, person_detail } from './fetch'
+import type { TimelineItem } from './types/celestial'
 
-export async function build_list(start_year: number, end_year: number, update_state: (list: any[]) => void, showWarning: (message: string) => void) {
-  const list = []
+export async function build_list(start_year: number, end_year: number, update_state: (list: TimelineItem[]) => void, showWarning: (message: string) => void) {
+  const list: TimelineItem[] = []
   let year = start_year
   const born_of_last_person = start_year
 
