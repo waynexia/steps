@@ -76,3 +76,33 @@
     text-shadow: 0 0 16px var(--constellation-color);
   }
 }
+
+/* Comet Ghost Trail Animation - Only when moving */
+@keyframes comet-ghost-fade {
+  0% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}
+
+/* Lifeline Light Point Animation - Moving light from birth to death */
+@keyframes lifeline-light-flow {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}

@@ -1,4 +1,4 @@
-import React, { useMemo, memo, useCallback } from 'react'
+import React, { useMemo, memo, useCallback, useRef, useEffect } from 'react'
 import type { CelestialTimelineData, TimelineSpine, TimelineItem, Person } from '../../types/celestial'
 import { getYearPosition, getConstellationXPosition, TIMELINE_CONFIG } from '../../utils/celestialMath'
 import { assignColorByName } from '../../utils/colorPalette'
@@ -22,6 +22,8 @@ const CelestialTimeline = React.forwardRef<HTMLDivElement, CelestialTimelineProp
 }, ref) => {
   const redundant = 3
   const timelineHeight = (endYear + redundant) * 10 // 10px per year
+  const prevHighlight = useRef(currentTimelineHighlight)
+  const cometRef = useRef<HTMLDivElement>(null)
 
   // Create timeline spine similar to original table approach
   const timelineSpine: TimelineSpine[] = useMemo(() => {
@@ -96,6 +98,25 @@ const CelestialTimeline = React.forwardRef<HTMLDivElement, CelestialTimelineProp
     // TODO: Implement proper constellation selection
   }, [])
 
+  // Detect comet movement and add ghost trail effect
+  useEffect(() => {
+    const comet = cometRef.current
+    if (!comet) return
+
+    if (prevHighlight.current !== currentTimelineHighlight) {
+      // Add moving class for ghost trail effect
+      comet.classList.add('comet-moving')
+      
+      // Remove class after trail animation completes
+      const timer = setTimeout(() => {
+        comet.classList.remove('comet-moving')
+      }, 1000) // Match animation duration + buffer
+
+      prevHighlight.current = currentTimelineHighlight
+      return () => clearTimeout(timer)
+    }
+  }, [currentTimelineHighlight])
+
   // Memoize gap calculations for uncovered timeline years
   const timelineGaps = useMemo(() => {
     return timelineSpine
@@ -127,21 +148,7 @@ const CelestialTimeline = React.forwardRef<HTMLDivElement, CelestialTimelineProp
           width: '100%',
         }}
       >
-        {/* Central Timeline Spine */}
-        <div
-          className="timeline-spine"
-          style={{
-            position: 'absolute',
-            left: `${TIMELINE_CONFIG.CENTRAL_SPINE_POSITION}%`,
-            top: '0',
-            width: `${TIMELINE_CONFIG.SPINE_WIDTH}px`,
-            height: `${timelineHeight}px`,
-            background: 'linear-gradient(to bottom, #64ffda 0%, #3742fa 50%, #64ffda 100%)',
-            transform: 'translateX(-50%)',
-            zIndex: 1,
-            opacity: 0.6,
-          }}
-        />
+        {/* Central Timeline Spine - Removed as requested */}
 
         {/* Year Labels */}
         {timelineSpine
@@ -165,8 +172,9 @@ const CelestialTimeline = React.forwardRef<HTMLDivElement, CelestialTimelineProp
             </div>
           ))}
 
-        {/* Comet (Year Marker) - Travels ON the central spine */}
+        {/* Comet (Year Marker) - Travels at center position */}
         <div
+          ref={cometRef}
           className="comet-head"
           style={{
             position: 'absolute',

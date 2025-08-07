@@ -55,6 +55,27 @@
 /* Lifespan Line - Simplified without SVG complexity */
 .constellation-lifeline {
   transition: all 0.3s ease-in-out;
+  position: relative; /* For positioning the moving light point */
+}
+
+/* Moving light point that travels along the lifeline */
+.constellation-lifeline::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--constellation-color);
+  box-shadow: 
+    0 0 10px var(--constellation-color),
+    0 0 20px var(--constellation-color),
+    0 0 30px rgba(var(--constellation-color-rgb, 255, 255, 255), 0.8);
+  transform: translate(-50%, -50%);
+  animation: lifeline-light-flow 4s ease-in-out infinite;
+  animation-delay: var(--lifeline-delay, 0s);
+  z-index: 2;
 }
 
 /* Active lifeline for currently viewing constellation */

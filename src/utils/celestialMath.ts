@@ -8,8 +8,8 @@
 export const TIMELINE_CONFIG = {
   PIXELS_PER_YEAR: 10,
   CENTRAL_SPINE_POSITION: 50, // Percentage
-  LEFT_CONSTELLATION_X: 35,   // Percentage
-  RIGHT_CONSTELLATION_X: 65,  // Percentage
+  LEFT_CONSTELLATION_X: 40,   // Percentage - Moved closer to center
+  RIGHT_CONSTELLATION_X: 60,  // Percentage - Moved closer to center
   SPINE_WIDTH: 4,             // Pixels
 } as const
 

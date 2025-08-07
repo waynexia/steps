@@ -43,6 +43,39 @@
     0 0 60px rgba(100, 255, 218, 0.3);
   z-index: var(--z-comet);
   transform: translateX(-50%);
+  position: relative; /* Enable pseudo-elements positioning */
+}
+
+/* Comet Ghost Trail - Only appears when moving */
+.comet-head.comet-moving::before,
+.comet-head.comet-moving::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #64ffda 0%, rgba(100, 255, 218, 0.4) 40%, transparent 70%);
+  pointer-events: none;
+  z-index: -1; /* Behind the main comet head */
+  animation: comet-ghost-fade 0.8s ease-out forwards;
+}
+
+/* First ghost particle */
+.comet-head.comet-moving::before {
+  width: 10px;
+  height: 10px;
+  top: 1px;
+  left: 1px;
+  box-shadow: 0 0 15px rgba(100, 255, 218, 0.3);
+  animation-delay: 0.1s;
+}
+
+/* Second ghost particle */
+.comet-head.comet-moving::after {
+  width: 8px;
+  height: 8px;
+  top: 2px;
+  left: 2px;
+  box-shadow: 0 0 10px rgba(100, 255, 218, 0.2);
+  animation-delay: 0.2s;
 }
 
 /* Celestial Timeline Container */

@@ -71,7 +71,9 @@ const Constellation: React.FC<ConstellationProps> = memo(({
           pointerEvents: 'none',
           zIndex: 1,
           borderRadius: '2px',
-        }}
+          '--constellation-color': constellation.color,
+          '--lifeline-delay': `${(constellation.id.match(/\d+/)?.[0] || '0') * 0.2}s`, // Staggered delay based on constellation index
+        } as React.CSSProperties}
       />
 
       {/* Constellation Label - Shows on hover */}
